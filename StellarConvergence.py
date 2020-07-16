@@ -14,7 +14,7 @@ import asyncio
 # ----------------Definitions----------------
 
 
-API_KEY = 'f036484926e49a7dd8466cf4d699a8a4'
+API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
 data_path = 'resources/database.csv'
 np.random.seed(20200401)
 
