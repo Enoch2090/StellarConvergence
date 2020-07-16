@@ -8,6 +8,7 @@ import os
 import random
 from datetime import datetime
 from PIL import Image
+import asyncio
 
 
 # ----------------Definitions----------------
@@ -18,6 +19,11 @@ data_path = 'resources/database.csv'
 np.random.seed(20200401)
 
 # ----------------Utilities----------------
+
+
+async def delete(file_path):
+    await asyncio.sleep(86400)
+    os.remove(file_path)
 
 
 def geoCode(address):
@@ -37,21 +43,26 @@ def geoDecode(location):
     return answer['regeocode']['formatted_address'] if answer['info'] == 'OK' else "Error"
 
 
+def getPos(map_data):
+    # TODO: Better algo.
+    lat_mean = round(map_data.mean(axis=0)['lat'], 6)
+    lon_mean = round(map_data.mean(axis=0)['lon'], 6)
+    return [lat_mean, lon_mean]
+
+
 # ----------------Menu----------------
 
 st.sidebar.title('StellarConvergence')
 option = st.sidebar.selectbox(
     'Menu',
-    ['寻找交点', '查看地图', '使用帮助', '关于'])
+    ['提交位置', '查看地图', '使用帮助', '关于'])
 
 
 # ----------------Functionalities----------------
-if option == '寻找交点':
-    # ----------------Generate Map----------------
-    st.title('输入你的位置')
+if option == '提交位置':
+    st.title('提交位置')
     data_submitted = False
     today = datetime.now()
-    st.title('Submit Data')
     addr_cache = st.text_input('输入当前位置：')
     fname_cache = st.text_input('输入活动代码，若无则留空')
     if st.button('Submit'):  # Submit button clicked event
@@ -78,7 +89,9 @@ if option == '寻找交点':
                 '提交成功。您的活动代码为'
                 fname_cache
                 '请将此代码分享给其他人来共用这一活动。活动有效期为 24 小时。'
+                asyncio.run(delete(data_path))
 elif option == '查看地图':
+    st.title('查看地图')
     fname_cache = st.text_input('输入活动代码，若无则留空')
     if st.button('Submit'):
         if fname_cache == '':
@@ -91,13 +104,12 @@ elif option == '查看地图':
                 map_data = pd.read_csv(data_path, usecols=[2, 3])
                 map_data = map_data.reindex(index=range(len(map_data)))
                 st.dataframe(map_data)
-                lat_mean = round(map_data.mean(axis=0)['lat'], 6)
-                lon_mean = round(map_data.mean(axis=0)['lon'], 6)
+                [lat_mean, lon_mean] = getPos(map_data)
                 st.pydeck_chart(pdk.Deck(
                     map_style='mapbox://styles/mapbox/basic-v9',
                     initial_view_state=pdk.ViewState(
-                        latitude=31.026024,
-                        longitude=121.437403,
+                        latitude=lat_mean,
+                        longitude=lon_mean,
                         zoom=15,
                         pitch=50,
                     ),
@@ -124,10 +136,19 @@ elif option == '查看地图':
                 '中心点的大致地址：'+geoDecode([lon_mean, lat_mean])
 
 elif option == '使用帮助':
-    '地址。'
+    f = open('README.md', 'r')
+    lines = f.readlines()
+    f.close()
+    README = ''
+    for line in lines:
+        README += line
+    st.markdown(README)
+
 elif option == '关于':
+    st.title('关于')
     '''
     [WhiteGivers](https://whitegivers.com).
+    [Enoch2090](https://enoch2090.me).
     '''
 # ----------------Hide Development Menu----------------
 hide_streamlit_style = """
