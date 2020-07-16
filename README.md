@@ -1,7 +1,7 @@
 # StellarConvergence
 
 ## 介绍
-StellarConvergence 是一个由 Python 编写，基于 [Streamlit](https://www.streamlit.io) 的简单应用，我将其部署在 [stellarconvergence.heroku.com](stellarconvergence.heroku.com)，你也可以下载代码自行部署。  
+StellarConvergence 是一个由 Python 编写，基于 [Streamlit](https://www.streamlit.io) 的简单应用，我将其部署在 [stellarconvergence.heroku.com](https://stellarconvergence.heroku.com)，你也可以下载代码自行部署。  
 StellarConvergence 用于在地图上寻找数个地点的中点。通过 StellarConvergence，你可以决定在哪里与朋友会面能让大家都不至于走太远。目前的计算是简单的经纬取平均数，更好的算法仍在开发中。  
 
 ## 使用方法
