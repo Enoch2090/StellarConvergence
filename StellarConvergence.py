@@ -14,7 +14,6 @@ import asyncio
 
 # ----------------Definitions----------------
 
-
 API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
 Z_SCORE_THRESHOLD = 1.00
 
@@ -51,6 +50,7 @@ def getPos(map_data):
 
 
 def removeOutliers(pos_data):
+    # Remove outliers.
     z_scores = stats.zscore(pos_data)
     abs_z_scores = np.abs(z_scores)
     filtered_entries = (abs_z_scores < Z_SCORE_THRESHOLD).all(axis=1)
