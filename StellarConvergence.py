@@ -15,7 +15,7 @@ import asyncio
 # ----------------Definitions----------------
 
 
-API_KEY = 'f036484926e49a7dd8466cf4d699a8a4'  # 高德地图开发者密钥
+API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
 Z_SCORE_THRESHOLD = 1.00
 
 # ----------------Utilities----------------
