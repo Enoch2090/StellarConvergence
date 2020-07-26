@@ -6,6 +6,7 @@ import requests
 import hashlib
 import os
 import random
+from scipy import stats
 from datetime import datetime
 from PIL import Image
 import asyncio
@@ -14,9 +15,8 @@ import asyncio
 # ----------------Definitions----------------
 
 
-API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
-data_path = 'resources/database.csv'
-np.random.seed(20200401)
+API_KEY = 'f036484926e49a7dd8466cf4d699a8a4'  # 高德地图开发者密钥
+Z_SCORE_THRESHOLD = 1.00
 
 # ----------------Utilities----------------
 
@@ -50,7 +50,14 @@ def getPos(map_data):
     return [lat_mean, lon_mean]
 
 
-# ----------------Menu----------------
+def removeOutliers(pos_data):
+    z_scores = stats.zscore(pos_data)
+    abs_z_scores = np.abs(z_scores)
+    filtered_entries = (abs_z_scores < Z_SCORE_THRESHOLD).all(axis=1)
+    return abs_z_scores, pos_data[filtered_entries]
+
+    # ----------------Menu----------------
+
 
 st.sidebar.title('StellarConvergence')
 option = st.sidebar.selectbox(
@@ -103,7 +110,9 @@ elif option == '查看地图':
             else:
                 map_data = pd.read_csv(data_path, usecols=[2, 3])
                 map_data = map_data.reindex(index=range(len(map_data)))
+                a, map_data = removeOutliers(map_data)
                 st.dataframe(map_data)
+                st.dataframe(a)
                 [lat_mean, lon_mean] = getPos(map_data)
                 st.pydeck_chart(pdk.Deck(
                     map_style='mapbox://styles/mapbox/basic-v9',
