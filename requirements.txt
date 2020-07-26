@@ -1,6 +1,7 @@
-pandas==1.0.3
-pydeck==0.4.0b2
-requests==2.22.0
-numpy==1.17.4
 streamlit==0.63.0
+pandas==1.0.3
+numpy==1.17.4
+scipy==1.4.1
+requests==2.22.0
+pydeck==0.4.0b2
 Pillow==7.2.0
