@@ -16,7 +16,7 @@ import asyncio
 
 API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
 if os.path.exists("USE_ENV_KEY"):
-    print("Using API_KEY retrieved from os environment: ")
+    print("Using API_KEY retrieved from os environment.")
     API_KEY = os.environ.get('API_KEY')
 Z_SCORE_THRESHOLD = 1.00
 
