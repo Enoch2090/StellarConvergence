@@ -15,6 +15,10 @@ import asyncio
 # ----------------Definitions----------------
 
 API_KEY = 'YOUR_KEY'  # 高德地图开发者密钥
+if os.path.exists("USE_ENV_KEY"):
+    print("Using API_KEY retrieved from os environment: ")
+    API_KEY = os.environ.get('API_KEY')
+    print(API_KEY)
 Z_SCORE_THRESHOLD = 1.00
 
 # ----------------Utilities----------------
@@ -110,9 +114,7 @@ elif option == '查看地图':
             else:
                 map_data = pd.read_csv(data_path, usecols=[2, 3])
                 map_data = map_data.reindex(index=range(len(map_data)))
-                a, map_data = removeOutliers(map_data)
                 st.dataframe(map_data)
-                st.dataframe(a)
                 [lat_mean, lon_mean] = getPos(map_data)
                 st.pydeck_chart(pdk.Deck(
                     map_style='mapbox://styles/mapbox/basic-v9',
